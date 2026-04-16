@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>M. Saqlain — Mechanical Design Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0c10;
+      --bg2:       #0e1118;
+      --bg3:       #141720;
+      --line:      rgba(255,255,255,0.07);
+      --blue:      #3d8bff;
+      --blue-dim:  #1a4a99;
+      --silver:    #c8d4e8;
+      --silver-dim:#5a6a82;
+      --gold:      #e8c96a;
+      --text:      #dce6f5;
+      --muted:     #6b7a96;
+      --radius:    6px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── Blueprint grid background ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(61,139,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(61,139,255,0.04) 1px, transparent 1px),
+        linear-gradient(rgba(61,139,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(61,139,255,0.02) 1px, transparent 1px);
+      background-size: 80px 80px, 80px 80px, 20px 20px, 20px 20px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── Noise texture overlay ── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      opacity: 0.4; pointer-events: none; z-index: 0;
+    }
+
+    section, nav, footer, header { position: relative; z-index: 1; }
+
+    /* ─────────── NAV ─────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      height: 64px;
+      background: rgba(10,12,16,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+      z-index: 100;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 3px;
+      color: var(--silver);
+    }
+    .nav-logo span { color: var(--blue); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--blue); }
+
+    /* ─────────── HERO ─────────── */
+    header {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 0 8vw;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Radial glow */
+    header::before {
+      content: '';
+      position: absolute;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(61,139,255,0.12) 0%, transparent 65%);
+      top: -200px; right: -200px;
+      pointer-events: none;
+    }
+
+    .hero-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 4px;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hero-tag::before {
+      content: ''; display: block;
+      width: 40px; height: 1px; background: var(--blue);
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 10vw, 9rem);
+      line-height: 0.9;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 0.3rem;
+    }
+    h1 span {
+      background: linear-gradient(135deg, var(--blue) 0%, #8ab8ff 60%, var(--silver) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-title {
+      font-family: 'DM Mono', monospace;
+      font-size: clamp(0.8rem, 1.6vw, 1.05rem);
+      color: var(--silver-dim);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 1.8rem;
+    }
+
+    .hero-summary {
+      max-width: 560px;
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-cta {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 0.75rem 1.8rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      border-radius: var(--radius);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.25s;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--blue);
+      color: #fff;
+      box-shadow: 0 0 30px rgba(61,139,255,0.3);
+    }
+    .btn-primary:hover {
+      background: #5aa0ff;
+      box-shadow: 0 0 40px rgba(61,139,255,0.5);
+      transform: translateY(-2px);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--silver);
+      border: 1px solid var(--line);
+    }
+    .btn-outline:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+      transform: translateY(-2px);
+    }
+
+    /* Hero stats */
+    .hero-stats {
+      position: absolute;
+      right: 8vw; bottom: 12vh;
+      display: flex; flex-direction: column; gap: 1.5rem;
+    }
+    .stat {
+      text-align: right;
+    }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: #fff;
+      line-height: 1;
+    }
+    .stat-num span { color: var(--blue); }
+    .stat-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* Corner decorations */
+    .corner {
+      position: absolute;
+      width: 60px; height: 60px;
+      border-color: var(--blue-dim);
+      border-style: solid;
+      opacity: 0.4;
+    }
+    .corner-tl { top: 30px; left: 30px; border-width: 2px 0 0 2px; }
+    .corner-br { bottom: 30px; right: 30px; border-width: 0 2px 2px 0; }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 8vw;
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .scroll-line {
+      width: 40px; height: 1px;
+      background: var(--muted);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { opacity: 0.3; width: 40px; }
+      50% { opacity: 1; width: 60px; }
+    }
+
+    /* ─────────── SECTION WRAPPER ─────────── */
+    .section {
+      padding: 8rem 8vw;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 5px;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-label::after {
+      content: ''; flex: 1;
+      height: 1px; background: var(--line);
+      max-width: 200px;
+    }
+
+    h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 3rem;
+    }
+    h2 em { color: var(--blue); font-style: normal; }
+
+    /* ─────────── EXPERIENCE ─────────── */
+    .timeline { display: flex; flex-direction: column; gap: 2px; }
+
+    .exp-card {
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .exp-card:hover { border-color: var(--blue-dim); }
+
+    .exp-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: 1rem;
+      padding: 2rem 2.5rem;
+      cursor: pointer;
+    }
+
+    .exp-company {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .exp-role {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .exp-duration {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+    }
+
+    .exp-toggle {
+      width: 32px; height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted);
+      font-size: 1.2rem;
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+    .exp-card.open .exp-toggle {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+      transform: rotate(45deg);
+    }
+
+    .exp-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.5s ease;
+    }
+    .exp-card.open .exp-body { max-height: 1000px; }
+
+    .exp-body-inner {
+      padding: 0 2.5rem 2rem;
+      border-top: 1px solid var(--line);
+    }
+    .exp-body-inner p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin: 1rem 0 1.2rem;
+    }
+
+    .exp-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.2rem; }
+    .pill {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      color: var(--silver-dim);
+    }
+    .pill.blue { border-color: var(--blue-dim); color: var(--blue); }
+
+    .resp-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px;
+    }
+    .resp-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      padding: 10px 12px;
+      background: var(--bg3);
+      border-radius: 4px;
+      border-left: 2px solid var(--blue-dim);
+    }
+    .resp-list li::before {
+      content: '▸'; color: var(--blue); flex-shrink: 0; margin-top: 1px;
+    }
+
+    /* ─────────── SKILLS ─────────── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-group {
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .skill-group:hover {
+      border-color: var(--blue-dim);
+      transform: translateY(-4px);
+    }
+    .skill-group::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--blue), transparent);
+    }
+
+    .skill-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .skill-group-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .skill-bars { display: flex; flex-direction: column; gap: 10px; }
+    .skill-row { display: flex; flex-direction: column; gap: 5px; }
+    .skill-name-row {
+      display: flex; justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--silver-dim);
+    }
+    .skill-pct {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--blue);
+    }
+    .bar-track {
+      height: 3px;
+      background: var(--bg3);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue-dim), var(--blue));
+      border-radius: 2px;
+      width: 0;
+      transition: width 1.2s ease;
+    }
+
+    /* ─────────── CERT / EDU ─────────── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    @media(max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+    .info-card {
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .info-card::after {
+      content: attr(data-glyph);
+      position: absolute;
+      right: 2rem; bottom: 1rem;
+      font-size: 6rem;
+      opacity: 0.04;
+      font-family: 'Bebas Neue', sans-serif;
+      color: var(--blue);
+      pointer-events: none;
+    }
+    .info-card-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 4px;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .info-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+    .info-card p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 1rem;
+      padding: 6px 14px;
+      background: rgba(61,139,255,0.1);
+      border: 1px solid var(--blue-dim);
+      border-radius: 20px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      color: var(--blue);
+    }
+
+    /* ─────────── CONTACT ─────────── */
+    #contact {
+      background: var(--bg2);
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    @media(max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } }
+
+    .contact-blurb {
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.9;
+      max-width: 440px;
+    }
+    .contact-links { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+    .contact-link {
+      display: flex; align-items: center; gap: 14px;
+      padding: 1rem 1.4rem;
+      background: var(--bg3);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.25s;
+    }
+    .contact-link:hover {
+      border-color: var(--blue);
+      transform: translateX(6px);
+    }
+    .contact-link-icon {
+      width: 36px; height: 36px;
+      background: rgba(61,139,255,0.12);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .contact-link-meta { display: flex; flex-direction: column; }
+    .contact-link-type {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .contact-link-val {
+      font-size: 0.88rem;
+      color: var(--silver);
+    }
+
+    /* Contact form */
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    label {
+      display: flex; flex-direction: column; gap: 6px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    input, textarea {
+      background: var(--bg3);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+    input:focus, textarea:focus { border-color: var(--blue); }
+    textarea { min-height: 120px; }
+
+    /* ─────────── FOOTER ─────────── */
+    footer {
+      padding: 2rem 8vw;
+      border-top: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-copy {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 2px;
+      color: var(--muted);
+    }
+    .footer-mark {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 3px;
+      color: var(--silver-dim);
+    }
+    .footer-mark span { color: var(--blue); }
+
+    /* ─────────── ANIMATIONS ─────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─────────── RESPONSIVE ─────────── */
+    @media(max-width: 768px) {
+      .nav-links { display: none; }
+      .hero-stats { display: none; }
+      .corner { display: none; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo">M.<span>Saqlain</span></div>
+  <ul class="nav-links">
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<header id="home">
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-br"></div>
+
+  <div class="hero-tag">Mechanical Design Engineer</div>
+  <h1>M.<br><span>Saqlain</span></h1>
+  <p class="hero-title">Tool &amp; Die Systems · Precision Tooling · CAD Specialist</p>
+  <p class="hero-summary">
+    A vision-driven engineering professional with 6+ years of experience designing and optimizing precision tooling systems — sheet metal progressive dies, injection molds, and CNC-machined components — for high-volume manufacturing environments.
+  </p>
+  <div class="hero-cta">
+    <a href="#contact" class="btn btn-primary">⚙ Get In Touch</a>
+    <a href="#experience" class="btn btn-outline">View Experience</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">6<span>+</span></div>
+      <div class="stat-label">Years Experience</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">3<span>+</span></div>
+      <div class="stat-label">CAD Platforms</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">2<span>+</span></div>
+      <div class="stat-label">Companies</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span class="scroll-line"></span>
+    Scroll to explore
+  </div>
+</header>
+
+<!-- ── EXPERIENCE ── -->
+<section class="section" id="experience">
+  <div class="section-label">Career History</div>
+  <h2>Work <em>Experience</em></h2>
+
+  <div class="timeline">
+
+    <!-- JW Vendor City -->
+    <div class="exp-card open fade-up" onclick="toggleExp(this)">
+      <div class="exp-header">
+        <div>
+          <div class="exp-company">JW Vendor City · Haier Subsidiary</div>
+          <div class="exp-role">Mechanical Design Engineer — Tooling &amp; Mold Systems</div>
+          <div class="exp-duration">Feb 2022 – Present &nbsp;·&nbsp; 3+ Years &nbsp;·&nbsp; RUBA Economic Zone</div>
+        </div>
+        <div class="exp-toggle">+</div>
+      </div>
+      <div class="exp-body">
+        <div class="exp-body-inner">
+          <p>
+            Leading design, development, and optimization of precision tooling systems for mass production of plastic and sheet metal components for Haier, Orient, Gree, and Dawlance appliances.
+          </p>
+          <div class="exp-pills">
+            <span class="pill blue">Progressive Dies</span>
+            <span class="pill blue">Injection Molds</span>
+            <span class="pill blue">Siemens NX</span>
+            <span class="pill">GD&amp;T</span>
+            <span class="pill">DFM/DFA</span>
+            <span class="pill">CNC</span>
+            <span class="pill">Wire Cut</span>
+            <span class="pill">Laser Cut</span>
+          </div>
+          <ul class="resp-list">
+            <li>3D CAD models &amp; 2D drawings for progressive dies and injection molds</li>
+            <li>GD&amp;T and tolerance stack-up for robust die alignment</li>
+            <li>DFM/DFA principles to minimize rework and improve tool life</li>
+            <li>Material selection for tool steels in sheet metal dies</li>
+            <li>Cross-functional coordination from tryout through SOP</li>
+            <li>Technical reporting on imported dies &amp; molds condition</li>
+            <li>BOM generation, design schedules, milestone reviews</li>
+            <li>Mentoring juniors in 3D modeling &amp; manufacturing design</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Continental Plastic Industry – Design Engineer -->
+    <div class="exp-card fade-up" onclick="toggleExp(this)">
+      <div class="exp-header">
+        <div>
+          <div class="exp-company">Continental Plastic Industry</div>
+          <div class="exp-role">Design Engineer</div>
+          <div class="exp-duration">Aug 2019 – Jan 2022 &nbsp;·&nbsp; 2+ Years</div>
+        </div>
+        <div class="exp-toggle">+</div>
+      </div>
+      <div class="exp-body">
+        <div class="exp-body-inner">
+          <p>
+            Oversaw operation, maintenance, and optimization of PET preform and blow molding machines. Designed injection molds for bottles, jars, and caps; machined molds on CNC and EDM equipment.
+          </p>
+          <div class="exp-pills">
+            <span class="pill blue">PET Blow Molding</span>
+            <span class="pill blue">Injection Mold Design</span>
+            <span class="pill">CNC Machining</span>
+            <span class="pill">EDM</span>
+            <span class="pill">SolidWorks</span>
+            <span class="pill">Preventive Maintenance</span>
+          </div>
+          <ul class="resp-list">
+            <li>Plastic injection mold design for bottles, jars, and caps</li>
+            <li>CNC &amp; EDM machining of molds for production</li>
+            <li>PET preform &amp; stretch blow molding machine monitoring</li>
+            <li>Troubleshooting: flash, deformation, neck defects, weight variation</li>
+            <li>Preventive &amp; accidental maintenance of injection molds</li>
+            <li>Hydraulic &amp; mechanical maintenance of injection machines</li>
+            <li>Continuous improvement for energy efficiency &amp; waste reduction</li>
+            <li>Production data records, parameter settings, downtime analysis</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Continental Plastic Industry – Procurement -->
+    <div class="exp-card fade-up" onclick="toggleExp(this)">
+      <div class="exp-header">
+        <div>
+          <div class="exp-company">Continental Plastic Industry</div>
+          <div class="exp-role">Technical Procurement Officer</div>
+          <div class="exp-duration">Sep 2018 – Jul 2019 &nbsp;·&nbsp; 10 Months</div>
+        </div>
+        <div class="exp-toggle">+</div>
+      </div>
+      <div class="exp-body">
+        <div class="exp-body-inner">
+          <p>
+            Managed technical procurement of accessories, molds, and spare parts for injection and blow molding machinery. Drove cost-effective sourcing aligned with production schedules.
+          </p>
+          <div class="exp-pills">
+            <span class="pill blue">Procurement</span>
+            <span class="pill">BOQ/BOM</span>
+            <span class="pill">Supplier Negotiation</span>
+            <span class="pill">Inventory Management</span>
+          </div>
+          <ul class="resp-list">
+            <li>Departmental requirements fetching &amp; BOQ creation</li>
+            <li>Supplier contract evaluation &amp; negotiation</li>
+            <li>Cost-effective sourcing for machine compatibility</li>
+            <li>Cross-departmental coordination for material forecasting</li>
+            <li>Quote requests, POs, and inspection process handling</li>
+            <li>Vendor bill clearance follow-up with accounts</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── SKILLS ── -->
+<section class="section" id="skills">
+  <div class="section-label">Technical Proficiency</div>
+  <h2>Core <em>Skills</em></h2>
+
+  <div class="skills-grid">
+
+    <div class="skill-group fade-up">
+      <div class="skill-icon">🔧</div>
+      <div class="skill-group-name">CAD / Design Software</div>
+      <div class="skill-bars">
+        <div class="skill-row">
+          <div class="skill-name-row"><span>Siemens NX</span><span class="skill-pct">95%</span></div>
+          <div class="bar-track"><div class="bar-fill" data-w="95"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name-row"><span>AutoCAD Mechanical</span><span class="skill-pct">92%</span></div>
+          <div class="bar-track"><div class="bar-fill" data-w="92"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name-row"><span>SolidWorks</span><span class="skill-pct">88%</span></div>
+          <div class="bar-track"><div class="bar-fill" data-w="88"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-group fade-up">
+      <div class="skill-icon">⚙️</div>
+      <div class="skill-group-name">Tooling &amp; Die Design</div>
+      <div class="skill-bars">
+        <div class="skill-row">
+          <div class="skill-name-row"><span>Progressive Sheet Metal Dies</span><span class="skill-pct">95%</span></div>
+          <div class="bar-track"><div class="bar-fill" data-w="95"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name-row"><span>Plastic Injection Molds</span><span class="skill-pct">90%</span></div>
+          <div class="bar-track"><div class="bar-fill" data-w="90"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name-row"><span>GD&amp;T &amp; Tolerance Stack-Up</span><span class="skill-pct">88%</span></div>
+          <div class="bar-track"><div class="bar-fill" data-w="88"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-group fade-up">
+      <div class="skill-icon">🏭</div>
+      <div class="skill-group-name">Manufacturing Processes</div>
+      <div class="skill-bars">
+        <div class="skill-row">
+          <div class="skill-name-row"><span>3-Axis CNC Operations</span><span class="skill-pct">85%</span></div>
+          <div class="bar-track"><div class="bar-fill" data-w="85"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name-row"><span>Wire Cut / Laser Cut</span><span class="skill-pct">82%</span></div>
+          <div class="bar-track"><div class="bar-fill" data-w="82"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name-row"><span>EDM Machining</span><span class="skill-pct">80%</span></div>
+          <div class="bar-track"><div class="bar-fill" data-w="80"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-group fade-up">
+      <div class="skill-icon">📋</div>
+      <div class="skill-group-name">Engineering &amp; Management</div>
+      <div class="skill-bars">
+        <div class="skill-row">
+          <div class="skill-name-row"><span>DFM / DFA Principles</span><span class="skill-pct">92%</span></div>
+          <div class="bar-track"><div class="bar-fill" data-w="92"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name-row"><span>Project &amp; BOM Management</span><span class="skill-pct">85%</span></div>
+          <div class="bar-track"><div class="bar-fill" data-w="85"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-name-row"><span>Technical Procurement</span><span class="skill-pct">88%</span></div>
+          <div class="bar-track"><div class="bar-fill" data-w="88"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── EDUCATION & CERT ── -->
+<section class="section" id="education">
+  <div class="section-label">Academic &amp; Professional</div>
+  <h2>Education &amp; <em>Certifications</em></h2>
+
+  <div class="two-col">
+    <div class="info-card fade-up" data-glyph="UET">
+      <div class="info-card-label">🎓 Degree</div>
+      <h3>BE Mechanical Engineering</h3>
+      <p>University of Engineering and Technology, Lahore<br/>Batch: 2013 – 2017</p>
+      <div class="badge">🏛 UET Lahore</div>
+    </div>
+
+    <div class="info-card fade-up" data-glyph="PEC">
+      <div class="info-card-label">🏅 Certification</div>
+      <h3>Certified Engineer</h3>
+      <p>Pakistan Engineering Council (PEC)<br/>Registration No: MECH/36971</p>
+      <div class="badge">✅ PEC Certified Engineer</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section class="section" id="contact">
+  <div class="section-label">Get In Touch</div>
+  <h2>Let's <em>Connect</em></h2>
+
+  <div class="contact-grid">
+    <div>
+      <p class="contact-blurb">
+        Open to design collaboration, technical consulting, and career opportunities in precision tooling, die design, and mechanical engineering. Feel free to reach out directly.
+      </p>
+      <div class="contact-links">
+        <a href="tel:+923016297201" class="contact-link">
+          <div class="contact-link-icon">📞</div>
+          <div class="contact-link-meta">
+            <span class="contact-link-type">Phone</span>
+            <span class="contact-link-val">+92 301 629 7201</span>
+          </div>
+        </a>
+        <div class="contact-link">
+          <div class="contact-link-icon">📍</div>
+          <div class="contact-link-meta">
+            <span class="contact-link-type">Location</span>
+            <span class="contact-link-val">Lahore, Pakistan</span>
+          </div>
+        </div>
+        <div class="contact-link">
+          <div class="contact-link-icon">🏅</div>
+          <div class="contact-link-meta">
+            <span class="contact-link-type">PEC Registration</span>
+            <span class="contact-link-val">MECH/36971</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <div class="form-row">
+        <label>
+          Name
+          <input type="text" placeholder="Your name" />
+        </label>
+        <label>
+          Email
+          <input type="email" placeholder="your@email.com" />
+        </label>
+      </div>
+      <label>
+        Subject
+        <input type="text" placeholder="Project / Opportunity / Collaboration" />
+      </label>
+      <label>
+        Message
+        <textarea placeholder="Tell me about your project or opportunity..."></textarea>
+      </label>
+      <button type="button" class="btn btn-primary" style="align-self:flex-start"
+        onclick="handleContact()">⚙ Send Message</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-copy">© 2025 M. Saqlain · All Rights Reserved</div>
+  <div class="footer-mark">M.<span>Saqlain</span> · Mechanical Design Engineer</div>
+</footer>
+
+<script>
+  /* ── Accordion toggle ── */
+  function toggleExp(card) {
+    card.classList.toggle('open');
+  }
+
+  /* ── Scroll animations ── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        // Animate skill bars when visible
+        e.target.querySelectorAll('.bar-fill').forEach(bar => {
+          bar.style.width = bar.dataset.w + '%';
+        });
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  /* ── Also trigger bars in already-open cards ── */
+  document.querySelectorAll('.exp-card.open .bar-fill').forEach(bar => {
+    bar.style.width = bar.dataset.w + '%';
+  });
+
+  /* ── Contact form handler ── */
+  function handleContact() {
+    const btn = event.target;
+    btn.textContent = '✓ Sent!';
+    btn.style.background = '#2a7a4a';
+    setTimeout(() => {
+      btn.textContent = '⚙ Send Message';
+      btn.style.background = '';
+    }, 3000);
+  }
+
+  /* ── Smooth nav highlight ── */
+  window.addEventListener('scroll', () => {
+    const sections = document.querySelectorAll('section[id], header[id]');
+    const links = document.querySelectorAll('.nav-links a');
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    links.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--blue)' : '';
+    });
+  });
+</script>
+</body>
+</html>
